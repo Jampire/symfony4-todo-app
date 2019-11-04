@@ -8,6 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ToDoListController
+ *
+ * @package App\Controller
+ */
 class ToDoListController extends AbstractController
 {
     /**
@@ -59,9 +64,15 @@ class ToDoListController extends AbstractController
 
     /**
      * @Route("/delete/{id}", name="delete_task", requirements={"id": "\d+"})
+     * @param Task $task Task
+     * @return Response
      */
-    public function delete(int $id): Response
+    public function delete(Task $task): Response
     {
-        return $this->json('delete ' . $id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($task);
+        $em->flush();
+
+        return $this->redirectToRoute('to_do_list');
     }
 }
