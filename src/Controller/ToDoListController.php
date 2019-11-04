@@ -12,10 +12,15 @@ class ToDoListController extends AbstractController
 {
     /**
      * @Route("/", name="to_do_list")
+     * @return Response
      */
     public function index(): Response
     {
-        return $this->render('to_do_list/index.html.twig');
+        $tasks = $this->getDoctrine()->getRepository(Task::class)->findBy([], ['id' => 'DESC']);
+
+        return $this->render('to_do_list/index.html.twig', [
+            'tasks' => $tasks,
+        ]);
     }
 
     /**
