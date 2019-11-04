@@ -46,10 +46,15 @@ class ToDoListController extends AbstractController
 
     /**
      * @Route("/update/{id}", name="update_task", requirements={"id": "\d+"})
+     * @param Task $task Task
+     * @return Response
      */
-    public function update(int $id): Response
+    public function update(Task $task): Response
     {
-        return $this->json('update ' . $id);
+        $task->setStatus(! $task->getStatus());
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('to_do_list');
     }
 
     /**
